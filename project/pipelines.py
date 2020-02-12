@@ -5,15 +5,14 @@ import json
 import requests
 import datetime
 import openpyxl
+from project import conf
 from openpyxl.styles import PatternFill, colors
-from scrapy.utils.project import get_project_settings
 
 
 class YYPipeline(object):
 
     def __init__(self):
-        self.words = get_project_settings().get('WORDS')
-        self.excel_file = get_project_settings().get('EXCEL_FILE')
+        self.excel_file = conf.excel_file
         sheet_name = '记录'
         if not os.path.isfile(self.excel_file):
             self.workbook = openpyxl.Workbook()
@@ -48,9 +47,7 @@ class YYPipeline(object):
     def verify_useful(self, item):
         return True
         # TODO
-        words = self.words
-        if '全军武器装备' in item['sources']:
-            words = get_project_settings().get('WORDS2')
+        words = conf.words if '全军武器装备' in item['sources'] else conf.words2
         date = datetime.datetime.strptime(item['time'], '%Y-%m-%d %H:%M')
         now = datetime.datetime.now().date()
         now_zero = datetime.datetime.now().replace(year=now.year, month=now.month, day=now.day, hour=0, minute=0, second=0)

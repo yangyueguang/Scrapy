@@ -8,7 +8,7 @@ from email.utils import parseaddr, formataddr
 import smtplib
 from email.mime.multipart import MIMEMultipart
 from email.mime.multipart import MIMEBase
-import project.settings as conf
+from project import conf
 import smtplib
 import time
 from email.mime.multipart import MIMEMultipart

@@ -118,7 +118,9 @@ class Yidong_Spider(scrapy.Spider):
     title = title_dict[name]
     allowed_domains = ['b2b.10086.cn']
     base_url = 'https://b2b.10086.cn/b2b/main/viewNoticeContent.html?noticeBean.id='
-
+    custom_settings = {
+        'SOME_SETTING': 'some value',
+    }
     def start_requests(self):
         url = 'https://b2b.10086.cn/b2b/main/listVendorNoticeResult.html?noticeBean.noticeType=2'
         for i in range(1, 5):
