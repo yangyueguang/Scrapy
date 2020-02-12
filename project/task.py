@@ -1,6 +1,8 @@
 # coding! utf-8
 # 发邮件的任务
 
+import os
+import sys
 from email import encoders
 from email.header import Header
 from email.mime.text import MIMEText
@@ -15,6 +17,14 @@ from email.mime.multipart import MIMEMultipart
 from email.mime.text import MIMEText
 from email.mime.base import MIMEBase
 from email.header import Header
+from scrapy.cmdline import execute
+
+
+def debug_scrapy():
+    scrapy_name = 'jincai'
+    sys.path.append(os.path.dirname(os.path.abspath(__file__)))
+    execute(['scrapy', 'crawl', scrapy_name])
+
 
 def xxxxx():
     def _format_addr(s):
@@ -75,6 +85,7 @@ def send_email(text):
 
 
 if __name__ == '__main__':
-    send_email('ds')
+    # send_email('ds')
+    debug_scrapy()
 
 
