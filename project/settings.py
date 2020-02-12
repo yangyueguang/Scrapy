@@ -14,14 +14,18 @@ USER_AGENTS = [
     'Mozilla/5.0 (Linux; U; Android 4.0.3; zh-cn; M032 Build/IML74K) AppleWebKit/534.30 (KHTML, like Gecko) Version/4.0 Mobile Safari/534.30',
     'Mozilla/5.0 (Windows; U; Windows NT 5.2) AppleWebKit/525.13 (KHTML, like Gecko) Chrome/0.2.149.27 Safari/525.13'
 ]
-
+#
 DEFAULT_REQUEST_HEADERS = {
-    'User-Agent': 'Mozilla/5.0 (compatible; MSIE 9.0; Windows NT 6.1; Trident/5.0;',
-    'Accept': 'text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8',
-    'Accept-Language': 'en',
+    'Accept': '*/*',
+    'Accept-Encoding': 'gzip, deflate',
+    'Accept-Language': 'en-US,en;q=0.9,zh-CN;q=0.8,zh;q=0.7',
+    'Connection': 'keep-alive',
+    # 'Cookie': 'SESSIONID=3d6579cc39d5b0a100aa83b604d696a0968f0c55; SESSIONID=3d6579cc39d5b0a100aa83b604d696a0968f0c55; UM_distinctid=17037d4b468653-0a70bdbf91f194-39647b0e-1aeaa0-17037d4b4698b0; CNZZDATA1261815924=413849371-1581480415-%7C1581480415; Hm_lvt_72331746d85dcac3dac65202d103e5d9=1581484652; Hm_lpvt_72331746d85dcac3dac65202d103e5d9=1581485162; userid_secure=fqa6+CEcAQuGQP2cO6B+cVzzRjpA7JmR8uIlfhIfU3AgDjX7qOaUu0O0eeYpQ9jtGFDlMZJLxMfpKX2IFJrpgAqQM2U/GdH+iFkNw8vCPozCEOAPfrFPgZ+MHi6/FOpodbWZan3+pz0g/W6NGRLRFSbabFS5cMVkIOsBpUBuQ8AdFiBXZAuJdbNxPeAnP+NpeHNMki+9MRfUp6D3l6kGPUKWBFozx40H1GgAycTLzCuoRGSPRq5E+ct0KIoOZgEmPOROpXo2ja5Wt2N+fvUYdQoxxpkFcbcj51pSBw43d6hVAlvc2D5h9zU9OKgQMFPE2BS02EWxjBtzweIT9pcmmyoqKjIwMjAtMDItMDkgMDA6MDA6MDA=',
+    'Content-Type': 'application/x-www-form-urlencoded; charset=UTF-8',
+    'User-Agent': 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_14_6) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/79.0.3945.130 Safari/537.36',
 }
 # 遵守robots.txt规则
-ROBOTSTXT_OBEY = True
+# ROBOTSTXT_OBEY = True
 # 使用了scrapy-redis里的去重组件，不使用scrapy默认的去重
 # DUPEFILTER_CLASS = "scrapy_redis.dupefilter.RFPDupeFilter"
 # 使用了scrapy-redis里的调度器组件，不实用scrapy默认的调度器
@@ -103,6 +107,7 @@ DOWNLOAD_DELAY = 3
 # 以下是自定义配置信息
 EXCEL_FILE = '/Users/supers/Desktop/result.xlsx'
 WORDS = ['rpa', 'RPA', '流程自动化', '流程机器人', '业务自动化', '推荐', '智能', '技术支撑', 'NLP', '自然语言处理']
+WORDS2 = ['数据中台', '知识图谱', '自然语言理解', '文档智能检索', 'NLP']
 FROM_EMAIL = '222@qq.com'
 FROM_PWD = '123456'
 TO_EMAIL = '2323@qq.com'

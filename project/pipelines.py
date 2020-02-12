@@ -46,6 +46,11 @@ class YYPipeline(object):
 
     # 验证文章是否是符合需求的
     def verify_useful(self, item):
+        return True
+        # TODO
+        words = self.words
+        if '全军武器装备' in item['sources']:
+            words = get_project_settings().get('WORDS2')
         date = datetime.datetime.strptime(item['time'], '%Y-%m-%d %H:%M')
         now = datetime.datetime.now().date()
         now_zero = datetime.datetime.now().replace(year=now.year, month=now.month, day=now.day, hour=0, minute=0, second=0)
@@ -54,9 +59,7 @@ class YYPipeline(object):
             return False
         res = requests.get(item['address'])
         res.encoding = 'utf-8'
-        for w in self.words:
+        for w in words:
             if w in res:
                 return True
-        # return False
-        # TODO
-        return True
+        return False
