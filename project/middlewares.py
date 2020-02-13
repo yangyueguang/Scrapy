@@ -2,6 +2,7 @@
 import time
 import random
 import scrapy
+import requests
 from project import conf
 from selenium import webdriver
 from selenium.common.exceptions import TimeoutException
@@ -11,6 +12,18 @@ from selenium.common.exceptions import TimeoutException
 class RandomUserAgentDownloadMiddleware(object):
     def process_request(self, request, spider):
         request.headers['User-Agent'] = random.choice(conf.user_agent_list)
+
+
+class LiantongDownloadMiddleware(object):
+    def __init__(self):
+        self.se = requests.session()
+
+    def process_request(self, request, spider):
+        home_url = request.meta.get('url')
+        if request.meta.get('isHome'):
+            self.se.get(home_url)
+        res = self.se.post(request.url)
+        return scrapy.http.HtmlResponse(url=request.url, body=res.text, request=request, encoding='utf-8', status=200)
 
 
 class SeleniumDownloadMiddleware(object):
@@ -32,21 +45,16 @@ class SeleniumDownloadMiddleware(object):
     def __del__(self):
         self.browser.close()
 
-    def _wait_element(self, xpath):
-        element_func = webdriver.support.expected_conditions.presence_of_element_located
-        return self.wait.until(element_func((webdriver.common.by.By.XPATH, xpath)))
-
     def process_request(self, request, spider):
         page = request.meta.get('page', 1)
         try:
-            self.browser.get(request.url)
-            if page < 5:
-                self.browser.execute_script("window.scrollBy(0,5000)")
-                submit = self._wait_element("//a[@href='javascript:page_jump();']")
-                submit.click()
-            else:
-                self.browser.close()
-                raise scrapy.exceptions.IgnoreRequest(request)
+            if page == 1:
+                self.browser.get(request.url)
+            elif 1 < page < 5:
+                next_element = self.browser.find_element_by_xpath('//*[@id="pageid2"]/table/tbody/tr/td[4]/a/span')
+                webdriver.ActionChains(self.browser).move_to_element(next_element).click(next_element).perform()
+                # raise scrapy.exceptions.IgnoreRequest(request)
+            time.sleep(3)
             return scrapy.http.HtmlResponse(url=request.url, body=self.browser.page_source, request=request, encoding='utf-8', status=200)
         except TimeoutException:
             return scrapy.http.HtmlResponse(url=request.url, status=500, request=request)
@@ -72,8 +80,11 @@ class CustomSpiderMiddleware(object):
         return None
 
     def process_spider_output(self, response, result, spider):
-        # spider处理完成
+        # spider结果处理
         for i in result:
+            if not i['unit']:
+                name = i['name']
+                i['unit'] = name.split('公司')[0]+'公司' if '公司' in name else name
             yield i
 
     def process_spider_exception(self, response, exception, spider):
@@ -86,7 +97,7 @@ class CustomSpiderMiddleware(object):
             yield r
 
     def spider_opened(self, spider):
-        spider.logger.info('Spider opened: %s' % spider.name)
+        print('爬虫打开了%s'%spider.name)
 
 
 # 扩展，用于监听爬虫生命周期活动

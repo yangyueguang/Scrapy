@@ -21,7 +21,7 @@ from scrapy.cmdline import execute
 
 
 def debug_scrapy():
-    scrapy_name = 'jincai'
+    scrapy_name = 'yidong'
     sys.path.append(os.path.dirname(os.path.abspath(__file__)))
     execute(['scrapy', 'crawl', scrapy_name])
 

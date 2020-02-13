@@ -34,8 +34,8 @@ class YYPipeline(object):
         row = self.sheet.max_row + 1
         if self.verify_useful(item):
             self.sheet.cell(row, 1, item['name'])
-            self.sheet.cell(row, 2, item['time'])
-            self.sheet.cell(row, 3, item['unit'])
+            self.sheet.cell(row, 2, item['unit'])
+            self.sheet.cell(row, 3, item['time'])
             self.sheet.cell(row, 4, item['address'])
             self.sheet.cell(row, 5, item['sources'])
         return item

@@ -119,32 +119,25 @@ class Yidong_Spider(scrapy.Spider):
     allowed_domains = ['b2b.10086.cn']
     base_url = 'https://b2b.10086.cn/b2b/main/viewNoticeContent.html?noticeBean.id='
     custom_settings = {
-        'SOME_SETTING': 'some value',
+        'DOWNLOADER_MIDDLEWARES': {
+            'project.middlewares.RandomUserAgentDownloadMiddleware': 100,
+            'project.middlewares.SeleniumDownloadMiddleware': 200
+        }
     }
+
     def start_requests(self):
-        url = 'https://b2b.10086.cn/b2b/main/listVendorNoticeResult.html?noticeBean.noticeType=2'
-        for i in range(1, 5):
-            # 向队列中加入post请求
-            params = {
-                'page.currentPage': str(i),
-                'page.perPageSize': '20',
-                'noticeBean.sourceCH': '',
-                'noticeBean.source': '',
-                'noticeBean.title': '',
-                'noticeBean.startDate': '',
-                'noticeBean.endDate': '',
-                '_qt': 'TYjlTMkjY2kzYyETN3UjMlRGM5kTYiFmNzkzNkNzMxQ'
-            }
-            yield scrapy.FormRequest(url=url, formdata=params, callback=self.parse)
+        url = 'https://b2b.10086.cn/b2b/main/listVendorNotice.html?noticeType=2'
+        for i in range(1, 3):
+            yield scrapy.Request(url, callback=self.parse, meta={'page': i}, dont_filter=True)
 
     def parse(self, response):
-        items = response.xpath('//table/tr/tr')
-        for each in items:
+        items = response.xpath('//*[@id="searchResult"]/table/tbody/tr')
+        for each in items[2:]:
             item = YYItem()
-            item['name'] = each.xpath('.//td[2]/text()').extract()[0]
-            item['time'] = each.xpath('.//td[last()]/text()').extract()[0]
-            item['unit'] = each.xpath('.//td[0]/text()').extract()[0]
-            item['address'] = self.base_url + each.xpath('.//@onclick').extract()[0]
+            item['name'] = each.xpath('.//td[3]/a/text()').extract()[0]
+            item['time'] = each.xpath('.//td[last()]/text()').extract()[0] + ' 00:00'
+            item['unit'] = each.xpath('.//td[1]/text()').extract()[0]
+            item['address'] = self.base_url + each.xpath('.//@onclick').extract()[0][14:-2]
             item['sources'] = self.title
             yield item
 
@@ -153,32 +146,28 @@ class Liantong_Spider(scrapy.Spider):
     name = keys[4]
     title = title_dict[name]
     allowed_domains = ['www.chinaunicombidding.cn']
-    base_url = 'https://b2b.10086.cn/b2b/main/viewNoticeContent.html?noticeBean.id='
+    custom_settings = {
+        'DOWNLOADER_MIDDLEWARES': {
+            'project.middlewares.RandomUserAgentDownloadMiddleware': 100,
+            'project.middlewares.LiantongDownloadMiddleware': 200
+        }
+    }
 
     def start_requests(self):
-        url = 'https://b2b.10086.cn/b2b/main/listVendorNoticeResult.html?noticeBean.noticeType=2'
-        for i in range(1, 5):
-            # 向队列中加入post请求
-            params = {
-                'page.currentPage': str(i),
-                'page.perPageSize': '20',
-                'noticeBean.sourceCH': '',
-                'noticeBean.source': '',
-                'noticeBean.title': '',
-                'noticeBean.startDate': '',
-                'noticeBean.endDate': '',
-                '_qt': 'TYjlTMkjY2kzYyETN3UjMlRGM5kTYiFmNzkzNkNzMxQ'
-            }
-            yield scrapy.FormRequest(url=url, formdata=params, callback=self.parse)
+        home_url = "http://www.chinaunicombidding.cn/jsp/cnceb/web/index_parent.jsp"
+        base_url = "http://www.chinaunicombidding.cn/jsp/cnceb/web/info1/infoList.jsp?page={}"
+        for i in range(1, 3):
+            yield scrapy.Request(base_url.format(i), callback=self.parse, meta={'url': home_url, 'isHome': i==1}, dont_filter=True)
 
     def parse(self, response):
-        items = response.xpath('//table/tr/tr')
+        item_base_url = "http://www.chinaunicombidding.cn{}"
+        items = response.xpath('//*[@id="div1"]/table/tr')
         for each in items:
             item = YYItem()
-            item['name'] = each.xpath('.//td[2]/text()').extract()[0]
-            item['time'] = each.xpath('.//td[last()]/text()').extract()[0]
-            item['unit'] = each.xpath('.//td[0]/text()').extract()[0]
-            item['address'] = self.base_url + each.xpath('.//@onclick').extract()[0]
+            item['name'] = each.xpath('.//td/span/@title').extract()[0]
+            item['time'] = each.xpath('.//td[2]/text()').extract()[0] + ' 00:00'
+            item['unit'] = ''
+            item['address'] = item_base_url.format(each.xpath('.//td/span/@onclick').extract()[0].split('"')[1])
             item['sources'] = self.title
             yield item
 
@@ -200,7 +189,7 @@ class Jianyu_Spider(scrapy.Spider):
                 item = YYItem()
                 item['name'] = each['title']
                 item['time'] = time.strftime("%Y-%m-%d %H:%M", time.localtime(each['publishtime']))
-                item['unit'] = '略'
+                item['unit'] = ''
                 item['address'] = self.base_url + each['_id'] + '.html'
                 item['sources'] = self.title
                 yield item
@@ -230,7 +219,7 @@ class Dongfang_Spider(scrapy.Spider):
                 item = YYItem()
                 item['name'] = each['title']
                 item['time'] = each['publishTime'][:-3]
-                item['unit'] = '略'
+                item['unit'] = ''
                 item['address'] = self.base_url + each['id']
                 item['sources'] = self.title
                 yield item
@@ -291,7 +280,7 @@ class Cgzb_Spider(scrapy.Spider):
             item = YYItem()
             item['name'] = each.xpath('//td[@class="td_1"]/a/text()').extract()[0]
             item['time'] = each.xpath('./td[last()]/text()').extract()[0] + ' 00:00'
-            item['unit'] = '略'
+            item['unit'] = ''
             item['address'] = 'https://www.chinabidding.cn' + each.xpath('//td[@class="td_1"]/a/@href').extract()[0]
             item['sources'] = self.title
             yield item
@@ -314,7 +303,7 @@ class Center_Spider(scrapy.Spider):
             item = YYItem()
             item['name'] = each.xpath('.//div/a[last()]/text()').extract()[0]
             item['time'] = each.xpath('.//div[@class="s_c_l_right"]/text()').extract()[1].split('\r')[0].replace('/', '-') + ' 00:00'
-            item['unit'] = '略'
+            item['unit'] = ''
             item['address'] = 'https://www.bidcenter.com.cn' + each.xpath('.//div/a[last()]/@href').extract()[0]
             item['sources'] = self.title
             yield item
@@ -337,7 +326,7 @@ class Huobiao_Spider(scrapy.Spider):
             item = YYItem()
             item['name'] = each.xpath('.//div/div/div[1]/text()').extract()[0]
             item['time'] = each.xpath('.//div/div/div[last()]/text()').extract()[1][1:12] + '00:00'
-            item['unit'] = '略'
+            item['unit'] = ''
             item['address'] = 'http://www.huobiao.cn' + each.xpath('./@href').extract()[0]
             item['sources'] = self.title
             yield item
@@ -362,7 +351,7 @@ class Jundui_Spider(scrapy.Spider):
                 item = YYItem()
                 item['name'] = each['nonSecretTitle']
                 item['time'] = each['publishTime'][:-3]
-                item['unit'] = '略'
+                item['unit'] = ''
                 item['address'] = 'http://www.weain.mil.cn' + each['pcUrl']
                 item['sources'] = self.title
                 yield item
@@ -387,7 +376,7 @@ class Jungong_Spider(scrapy.Spider):
                 item = YYItem()
                 item['name'] = each['nonSecretTitle']
                 item['time'] = each['publishTime'][:-3]
-                item['unit'] = '略'
+                item['unit'] = ''
                 item['address'] = 'http://www.weain.mil.cn' + each['pcUrl']
                 item['sources'] = self.title
                 yield item
