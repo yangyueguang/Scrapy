@@ -1,6 +1,7 @@
 # coding! utf-8
 import scrapy
 import json
+from project import conf
 from scrapy.linkextractors import LinkExtractor
 #from scrapy.spiders import CrawlSpider, Rule
 from scrapy.spiders import Rule
@@ -179,8 +180,18 @@ class Jianyu_Spider(scrapy.Spider):
     base_url = 'https://www.jianyu360.com/article/content/'
     def start_requests(self):
         url = 'https://www.jianyu360.com/jylab/supsearch/getNewBids'
-        for i in range(1, 5):
-            yield scrapy.FormRequest(url=url, formdata={'pageNumber': str(i)}, callback=self.parse)
+        search_url = 'https://www.jianyu360.com/front/pcAjaxReq'
+        for w in conf.words:
+            for i in range(1, 4):
+                params = {
+                    "pageNumber": str(i),
+                    "reqType": "bidSearch",
+                    "searchvalue": w,
+                    "subtype": "招标,邀标,询价,竞谈,单一,竞价,变更,其他",
+                    "publishtime": "lately-7"
+                }
+                time.sleep(3)
+                yield scrapy.FormRequest(search_url, formdata=params, callback=self.parse)
 
     def parse(self, response):
         res = json.loads(response.text)

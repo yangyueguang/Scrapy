@@ -3,6 +3,7 @@
 
 import os
 import sys
+import requests
 from email import encoders
 from email.header import Header
 from email.mime.text import MIMEText
@@ -21,7 +22,7 @@ from scrapy.cmdline import execute
 
 
 def debug_scrapy():
-    scrapy_name = 'yidong'
+    scrapy_name = 'jianyu'
     sys.path.append(os.path.dirname(os.path.abspath(__file__)))
     execute(['scrapy', 'crawl', scrapy_name])
 
@@ -84,8 +85,29 @@ def send_email(text):
         print("发送失败，因为:{}.".format(e))
 
 
+
+
+
+
+
 if __name__ == '__main__':
     # send_email('ds')
-    debug_scrapy()
-
+    # debug_scrapy()
+    def start_requests():
+        url = 'https://www.jianyu360.com/jylab/supsearch/getNewBids'
+        search_url = 'https://www.jianyu360.com/front/pcAjaxReq'
+        params = {
+            "pageNumber": '1',
+            "reqType": "bidSearch",
+            "searchvalue": 'NLP',
+            "subtype": "招标,邀标,询价,竞谈,单一,竞价,变更,其他",
+            "publishtime": "lately-7",
+            "selectType": "all",
+            "tabularflag": "Y"
+        }
+        se = requests.session()
+        res = se.post(search_url, data=params, headers={'User-Agent': 'Mozilla/5.0 (compatible; MSIE 10.0; Windows NT 6.1; WOW64; Trident/6.0)'})
+        res.encoding = 'utf-8'
+        print(res.text)
+    start_requests()
 

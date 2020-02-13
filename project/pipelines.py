@@ -47,15 +47,17 @@ class YYPipeline(object):
     def verify_useful(self, item):
         return True
         # TODO
-        words = conf.words if '全军武器装备' in item['sources'] else conf.words2
         date = datetime.datetime.strptime(item['time'], '%Y-%m-%d %H:%M')
-        now = datetime.datetime.now().date()
-        now_zero = datetime.datetime.now().replace(year=now.year, month=now.month, day=now.day, hour=0, minute=0, second=0)
-        day = (date - now_zero).days
+        n = datetime.datetime.now().date()
+        now_zero = datetime.datetime.now().replace(year=n.year, month=n.month, day=n.day, hour=0, minute=0, second=0)
+        day = (now_zero - date).days
         if day >= 1 or day < 0:
             return False
+        if item['sources'] == '剑鱼网':
+            return True
         res = requests.get(item['address'])
         res.encoding = 'utf-8'
+        words = conf.words if '全军武器装备' in item['sources'] else conf.words2
         for w in words:
             if w in res:
                 return True
