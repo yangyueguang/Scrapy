@@ -13,7 +13,7 @@ from selenium.common.exceptions import TimeoutException
 class RandomUserAgentDownloadMiddleware(object):
     def process_request(self, request, spider):
         request.headers['User-Agent'] = random.choice(conf.user_agent_list)
-        request.meta["proxy"] = "http://" + random.choice(conf.ip_pool)
+        # request.meta["proxy"] = "http://" + random.choice(conf.ip_pool)
         # 私有代理池
         # proxy = random.choice(conf.private_ip_pool)
         # proxy_user_pass = proxy['username'] + ':' + proxy['password']

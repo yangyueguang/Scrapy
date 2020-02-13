@@ -2,10 +2,12 @@
 excel_file = '/Users/supers/Desktop/result.xlsx'
 words = ['rpa', 'RPA', '流程自动化', '流程机器人', '业务自动化', '推荐', '智能', '技术支撑', 'NLP', '自然语言处理']
 words2 = ['数据中台', '知识图谱', '自然语言理解', '文档智能检索', 'NLP']
-FROM_EMAIL = '222@qq.com'
-FROM_PWD = '123456'
-TO_EMAIL = '2323@qq.com'
-SMTP_SERVER = 'smtp.qq.com'
+from_username = '2829969299@qq.com'
+from_email = '2829969299@qq.com'
+from_pwd = 'xwfwnmyzsygydhae'  # 这是邮箱设置里账户开启SMTP服务生成的密码
+to_email = ['2502666011@qq.com', '2430878895@qq.com']
+smtp_server = 'smtp.qq.com'
+smtp_port = 587  # 465
 
 
 user_agent_list = [

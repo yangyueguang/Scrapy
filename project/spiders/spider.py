@@ -178,6 +178,20 @@ class Jianyu_Spider(scrapy.Spider):
     title = title_dict[name]
     allowed_domains = ['www.jianyu360.com']
     base_url = 'https://www.jianyu360.com/article/content/'
+    custom_settings = {
+        'DEFAULT_REQUEST_HEADERS': {
+            "Host": "www.jianyu360.com",
+            "Origin": "https://www.jianyu360.com",
+            "Pragma": "no-cache",
+            "Referer": "https://www.jianyu360.com/jylab/supsearch/index.html",
+            "Sec-Fetch-Dest": "empty",
+            "Sec-Fetch-Mode": "cors",
+            "Sec-Fetch-Site": "same-origin",
+            "User-Agent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_2) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/80.0.3987.100 Safari/537.36",
+            "X-Requested-With": "XMLHttpRequest"
+        }
+    }
+
     def start_requests(self):
         url = 'https://www.jianyu360.com/jylab/supsearch/getNewBids'
         search_url = 'https://www.jianyu360.com/front/pcAjaxReq'
