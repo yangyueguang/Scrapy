@@ -54,7 +54,6 @@ class Jincai_spider(scrapy.Spider):
         res = json.loads(response.text)
         if res.get('result'):
             for each in res.get('rows'):
-                print(each)
                 item = YYItem()
                 item['name'] = each['noticeTitle']
                 item['time'] = each['publishTime'][:-5]

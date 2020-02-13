@@ -4,6 +4,7 @@ import time
 import random
 import scrapy
 import requests
+from project.items import YYItem
 from project import conf
 from selenium import webdriver
 from selenium.common.exceptions import TimeoutException
@@ -74,7 +75,7 @@ class SeleniumDownloadMiddleware(object):
             return scrapy.http.HtmlResponse(url=request.url, status=500, request=request)
 
     def process_response(self, request, response, spider):
-        print(request, response)
+        # print(request, response)
         return response
 
     def process_exception(self, request, exception, spider):
@@ -96,9 +97,12 @@ class CustomSpiderMiddleware(object):
     def process_spider_output(self, response, result, spider):
         # spider结果处理
         for i in result:
-            if not i['unit']:
-                name = i['name']
-                i['unit'] = name.split('公司')[0]+'公司' if '公司' in name else name
+            if not i:
+                continue
+            if isinstance(i, YYItem):
+                if not i['unit']:
+                    name = i['name']
+                    i['unit'] = name.split('公司')[0]+'公司' if '公司' in name else name
             yield i
 
     def process_spider_exception(self, response, exception, spider):
