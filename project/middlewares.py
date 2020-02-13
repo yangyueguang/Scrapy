@@ -1,4 +1,5 @@
 # coding! utf-8
+import base64
 import time
 import random
 import scrapy
@@ -12,6 +13,19 @@ from selenium.common.exceptions import TimeoutException
 class RandomUserAgentDownloadMiddleware(object):
     def process_request(self, request, spider):
         request.headers['User-Agent'] = random.choice(conf.user_agent_list)
+        request.meta["proxy"] = "http://" + random.choice(conf.ip_pool)
+        # 私有代理池
+        # proxy = random.choice(conf.private_ip_pool)
+        # proxy_user_pass = proxy['username'] + ':' + proxy['password']
+        # encoded_user_pass = base64.b64encode(proxy_user_pass.encode('utf-8'))
+        # request.meta['proxy'] = "http://" + proxy['ip']
+        # request.headers['Proxy-Authorization'] = 'Basic ' + str(encoded_user_pass, encoding="utf-8")
+
+    def process_response(self, request, response, spider):
+        if response.status != 200:
+            request.meta['proxy'] = "http://" + random.choice(conf.ip_pool)
+            return request
+        return response
 
 
 class LiantongDownloadMiddleware(object):

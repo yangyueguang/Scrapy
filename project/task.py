@@ -92,7 +92,7 @@ def send_email(text):
 
 if __name__ == '__main__':
     # send_email('ds')
-    # debug_scrapy()
+    debug_scrapy()
     def start_requests():
         url = 'https://www.jianyu360.com/jylab/supsearch/getNewBids'
         search_url = 'https://www.jianyu360.com/front/pcAjaxReq'
@@ -109,5 +109,5 @@ if __name__ == '__main__':
         res = se.post(search_url, data=params, headers={'User-Agent': 'Mozilla/5.0 (compatible; MSIE 10.0; Windows NT 6.1; WOW64; Trident/6.0)'})
         res.encoding = 'utf-8'
         print(res.text)
-    start_requests()
+    # start_requests()
 
