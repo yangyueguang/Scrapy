@@ -2,7 +2,7 @@
 import os
 import sys
 import smtplib
-from project import conf
+import conf
 from scrapy.cmdline import execute
 from email import encoders
 from email.header import Header
@@ -51,5 +51,5 @@ def send_mail():
 
 
 if __name__ == '__main__':
-    # send_mail()
-    debug_scrapy()
+    send_mail()
+    # debug_scrapy()

@@ -1,7 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="ChangeListManager">
-    <list default="true" id="40bce766-277a-40d0-82cb-5fac0611a8e3" name="Default" comment="update" />
+    <list default="true" id="40bce766-277a-40d0-82cb-5fac0611a8e3" name="Default" comment="update">
+      <change beforePath="$PROJECT_DIR$/.idea/youyuan.iml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/youyuan.iml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/project/task.py" beforeDir="false" afterPath="$PROJECT_DIR$/project/task.py" afterDir="false" />
+    </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -171,6 +174,7 @@
       <workItem from="1581558096245" duration="14635000" />
       <workItem from="1581593851059" duration="11318000" />
       <workItem from="1581651369945" duration="4187000" />
+      <workItem from="1581661194596" duration="45000" />
     </task>
     <task id="LOCAL-00001" summary="update">
       <created>1581510862264</created>
