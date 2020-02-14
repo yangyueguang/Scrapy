@@ -8,6 +8,9 @@ function all_run() {
     echo $var
     scrapy crawl $var
   done
+  sleep 3
+  python3 task.py
+  rm -f /Users/supers/Desktop/result.xlsx
 }
 
 function create() {

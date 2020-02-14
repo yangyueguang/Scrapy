@@ -14,6 +14,14 @@ class YYPipeline(object):
 
     def __init__(self):
         self.se = requests.session()
+        self.se.headers = {
+            'Accept': '*/*',
+            'Accept-Encoding': 'gzip, deflate',
+            'Accept-Language': 'en-US,en;q=0.9,zh-CN;q=0.8,zh;q=0.7',
+            'Connection': 'keep-alive',
+            'Content-Type': 'application/x-www-form-urlencoded; charset=UTF-8',
+            'User-Agent': 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_14_6) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/79.0.3945.130 Safari/537.36',
+        }
         self.excel_file = conf.excel_file
         sheet_name = '记录'
         if not os.path.isfile(self.excel_file):
@@ -57,20 +65,28 @@ class YYPipeline(object):
         now_zero = datetime.datetime.now().replace(year=n.year, month=n.month, day=n.day, hour=0, minute=0, second=0)
         day = (now_zero - date).days
         # 包含昨天和今天的
-        if day >= 1 or day < -1:
+        if day > 1 or day < -1:
             return False
-        if item['sources'] == '剑鱼网':
+        source = item['sources']
+        if source == '剑鱼网':
             return True
-        headers = {
-            'Accept': '*/*',
-            'Accept-Encoding': 'gzip, deflate',
-            'Accept-Language': 'en-US,en;q=0.9,zh-CN;q=0.8,zh;q=0.7',
-            'Connection': 'keep-alive',
-            'Content-Type': 'application/x-www-form-urlencoded; charset=UTF-8',
-            'User-Agent': 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_14_6) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/79.0.3945.130 Safari/537.36',
-        }
-        res = self.se.get(item['address'], headers=headers)
-        res.encoding = 'utf-8'
+        elif source == '金采网':
+            source_id = item['address'].split('=')[-1]
+            detail_url = 'http://www.cfcpn.com/jcw/noticeinfo/noticeInfo/dataNoticeList'
+            res = self.se.post(detail_url, data={'id': source_id, 'isDetail': '1'})
+            res.encoding = 'utf-8'
+        elif source == '中国东方航空采购招标网':
+            source_id = item['address'].split('=')[-1]
+            detail_url = 'https://caigou.ceair.com/portal/portal/findSysInfo?siteFlag=false'
+            res = self.se.post(detail_url, data={'id': source_id})
+            res.encoding = 'utf-8'
+        elif source == '中国联通':
+            self.se.get('http://www.chinaunicombidding.cn/jsp/cnceb/web/index_parent.jsp')
+            res = self.se.get(item['address'])
+            res.encoding = 'gb2312'
+        else:
+            res = self.se.get(item['address'])
+            res.encoding = 'utf-8'
         print(res.url)
         print(res.status_code)
         if res.status_code != 200:

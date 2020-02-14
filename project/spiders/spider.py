@@ -227,7 +227,7 @@ class Dongfang_Spider(scrapy.Spider):
 
     def start_requests(self):
         url = 'https://caigou.ceair.com/portal/portal/sysInfoList?siteFlag=false'
-        for i in range(1, 2):
+        for i in range(1, 5):
             params = {
                 'pageNo': str(i),
                 'sourceType': '1',
