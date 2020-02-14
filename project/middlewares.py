@@ -1,6 +1,8 @@
 # coding! utf-8
 import base64
 import time
+import json
+import datetime
 import random
 import scrapy
 import requests
@@ -81,6 +83,32 @@ class SeleniumDownloadMiddleware(object):
     def process_exception(self, request, exception, spider):
         # 至少返回None或者request或者response
         pass
+
+
+class JianyuDownloadMiddleware(object):
+    def __init__(self):
+        self.se = requests.session()
+
+    def process_request(self, request, spider):
+        headers = spider.settings.attributes['DEFAULT_REQUEST_HEADERS'].value.copy_to_dict()
+        timeStamp2 = str(int(time.mktime(time.strptime(str(datetime.date.today()), "%Y-%m-%d"))))
+        index_url = "https://www.jianyu360.com/jylab/supsearch/index.html"
+        search_url = 'https://www.jianyu360.com/front/pcAjaxReq'
+        self.se.get(index_url, headers=headers)
+        items = list()
+        for w in conf.words:
+            for i in range(1, 2):
+                params = {
+                    "pageNumber": str(i),
+                    "reqType": "bidSearch",
+                    "searchvalue": w,
+                    "subtype": "招标",
+                    "publishtime": "_".join([timeStamp2, timeStamp2]),
+                }
+                time.sleep(random.randint(1, 3))
+                res = self.se.post(search_url, data=params, headers=headers)
+                items.append(json.loads(res.text.replace("\n", '').replace(" ", "")))
+        return scrapy.http.TextResponse(url=request.url, body=json.dumps(items), encoding='utf-8', status=200)
 
 
 # 爬虫中间件

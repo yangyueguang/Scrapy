@@ -175,41 +175,21 @@ class Liantong_Spider(scrapy.Spider):
 class Jianyu_Spider(scrapy.Spider):
     name = keys[5]
     title = title_dict[name]
-    allowed_domains = ['www.jianyu360.com']
+    allowed_domains = ['jianyu360.com']
     base_url = 'https://www.jianyu360.com/article/content/'
     custom_settings = {
-        'DEFAULT_REQUEST_HEADERS': {
-            "Host": "www.jianyu360.com",
-            "Origin": "https://www.jianyu360.com",
-            "Pragma": "no-cache",
-            "Referer": "https://www.jianyu360.com/jylab/supsearch/index.html",
-            "Sec-Fetch-Dest": "empty",
-            "Sec-Fetch-Mode": "cors",
-            "Sec-Fetch-Site": "same-origin",
-            "User-Agent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_2) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/80.0.3987.100 Safari/537.36",
-            "X-Requested-With": "XMLHttpRequest"
+        "DOWNLOADER_MIDDLEWARES": {
+            'project.middlewares.RandomUserAgentDownloadMiddleware': 100,
+            'project.middlewares.JianyuDownloadMiddleware': 200
         }
     }
-
-    def start_requests(self):
-        url = 'https://www.jianyu360.com/jylab/supsearch/getNewBids'
-        search_url = 'https://www.jianyu360.com/front/pcAjaxReq'
-        for w in conf.words:
-            for i in range(1, 4):
-                params = {
-                    "pageNumber": str(i),
-                    "reqType": "bidSearch",
-                    "searchvalue": w,
-                    "subtype": "招标,邀标,询价,竞谈,单一,竞价,变更,其他",
-                    "publishtime": "lately-7"
-                }
-                time.sleep(3)
-                yield scrapy.FormRequest(search_url, formdata=params, callback=self.parse)
+    start_urls = ['https://www.jianyu360.com/jylab/supsearch/index.html']
 
     def parse(self, response):
         res = json.loads(response.text)
-        if res.get('list'):
-            for each in res.get('list'):
+        for ite in res:
+            items = ite.get('list') if ite.get('list') else []
+            for each in items:
                 item = YYItem()
                 item['name'] = each['title']
                 item['time'] = time.strftime("%Y-%m-%d %H:%M", time.localtime(each['publishtime']))
