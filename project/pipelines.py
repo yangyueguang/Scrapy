@@ -3,6 +3,9 @@
 import os
 import time
 import json
+import redis
+import pymongo
+import pymysql
 import requests
 import datetime
 import openpyxl
@@ -96,3 +99,41 @@ class YYPipeline(object):
             if w in res.text:
                 return True
         return False
+
+
+class MongoDB_pipline(object):
+    def process_item(self, item, spider):
+        redis_cli = redis.Redis(host="127.0.0.1", port=6379, db="0")
+        mongo_cli = pymongo.MongoClient(host="127.0.0.1", port=27017)
+        # 创建mongodb数据库名称
+        dbname = mongo_cli["student"]
+        # 创建mongodb数据库的表名称
+        sheet_name = dbname["beijing"]
+        offset = 0
+        while True:
+            source, data = redis_cli.blpop("yy:items")
+            offset += 1
+            data = json.loads(data)
+            sheet_name.insert(data)
+            print(offset)
+
+
+class MySQL_pipline(object):
+    def process_item(self, item, spider):
+        redis_cli = redis.Redis(host="127.0.0.1", port=6379, db=0)
+        mysql_cli = pymysql.connect(host="127.0.0.1", port=3306, user="admin", passwd="123456", db="student")
+        offset = 0
+        while True:
+            source, data = redis_cli.blpop("yy:items")
+            item = json.loads(data)
+            sql = "insert into beijing (username, age, header_url) values (%s, %s, %s)"
+            try:
+                cursor = mysql_cli.cursor()
+                cursor.execute(sql, [item['username'], item['age'], item['header_url']])
+                mysql_cli.commit()
+                cursor.close()
+                offset += 1
+                print(offset)
+            except:
+                pass
+
