@@ -1,10 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="ChangeListManager">
-    <list default="true" id="40bce766-277a-40d0-82cb-5fac0611a8e3" name="Default" comment="update">
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/project/spiders/redis_spider.py" beforeDir="false" afterPath="$PROJECT_DIR$/project/spiders/redis_spider.py" afterDir="false" />
-    </list>
+    <list default="true" id="40bce766-277a-40d0-82cb-5fac0611a8e3" name="Default" comment="update" />
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -177,7 +174,7 @@
       <workItem from="1581661194596" duration="45000" />
       <workItem from="1581671037304" duration="1955000" />
       <workItem from="1581840275886" duration="8867000" />
-      <workItem from="1581860786120" duration="1526000" />
+      <workItem from="1581860786120" duration="1746000" />
     </task>
     <task id="LOCAL-00001" summary="update">
       <created>1581510862264</created>
@@ -256,7 +253,14 @@
       <option name="project" value="LOCAL" />
       <updated>1581854464579</updated>
     </task>
-    <option name="localTasksCounter" value="12" />
+    <task id="LOCAL-00012" summary="update">
+      <created>1581868225584</created>
+      <option name="number" value="00012" />
+      <option name="presentableId" value="LOCAL-00012" />
+      <option name="project" value="LOCAL" />
+      <updated>1581868225584</updated>
+    </task>
+    <option name="localTasksCounter" value="13" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
