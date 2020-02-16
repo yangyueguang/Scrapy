@@ -31,15 +31,17 @@ COOKIES_DEBUG = True
 TELNETCONSOLE_ENABLED = True
 # 0或1。0深度优先，一下找到底，然后再找其他的 1广度优先，一层一层找他们内部的原理就是根据response.meta里的depth(层数)来找。
 DEPTH_PRIORITY = 0
-# 使用了scrapy-redis里的去重组件，不使用scrapy默认的去重
+
+# 如果做分布式要解注释以下几个。redis_host redis_port 去重规则 调度规则 对列形式 管道文件要有scrapy_redis
+# REDIS_HOST = '127.0.0.1'
+# REDIS_PORT = 6379
 # DUPEFILTER_CLASS = "scrapy_redis.dupefilter.RFPDupeFilter"
-# 使用了scrapy-redis里的调度器组件，不实用scrapy默认的调度器
 # SCHEDULER = "scrapy_redis.scheduler.Scheduler"
-# 使用队列形式
 # SCHEDULER_QUEUE_CLASS = "scrapy_redis.queue.SpiderQueue"
 # 管道文件
 ITEM_PIPELINES = {
     'project.pipelines.YYPipeline': 300,
+    # 'scrapy_redis.pipelines.RedisPipeline': 400,
 }
 # 爬虫中间件
 SPIDER_MIDDLEWARES = {
