@@ -22,6 +22,7 @@ CONCURRENT_REQUESTS_PER_DOMAIN = 16
 CONCURRENT_REQUESTS_PER_IP = 16
 # 访问相同的网页延迟时间
 DOWNLOAD_DELAY = 3
+DOWNLOAD_TIMEOUT = 180
 # 是否启用cookie
 COOKIES_ENABLED = False
 # 是否是调试模式，调试模式下每次得到cookie都会打印
