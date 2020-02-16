@@ -12,7 +12,7 @@ from email.mime.multipart import MIMEMultipart
 
 
 def debug_scrapy():
-    scrapy_name = 'jianyu'
+    scrapy_name = 'sun'
     sys.path.append(os.path.dirname(os.path.abspath(__file__)))
     execute(['scrapy', 'crawl', scrapy_name])
 

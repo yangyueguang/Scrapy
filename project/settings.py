@@ -9,6 +9,11 @@ DEPTH_LIMIT = 4
 ROBOTSTXT_OBEY = False
 # 允许暂停，redis请求记录不丢失
 SCHEDULER_PERSIST = True
+LOG_ENABLED = True
+LOG_STDOUT = False
+LOG_FILE = "root.log"
+LOG_LEVEL = "DEBUG"
+
 # 最大并发量
 CONCURRENT_REQUESTS = 16
 # 单域名访问并发数，并且延迟下次秒数也应用在每个域名，比CONCURRENT_REQUESTS更加细致的并发
