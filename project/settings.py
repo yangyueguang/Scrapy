@@ -3,6 +3,7 @@
 BOT_NAME = 'project'  # 爬虫名称
 SPIDER_MODULES = ['project.spiders']  # 爬虫应用路径
 NEWSPIDER_MODULE = 'project.spiders'
+COMMANDS_MODULE = 'project.commands'
 # 爬虫允许的最大深度，可以通过meta查看当前深度；0表示无深度
 DEPTH_LIMIT = 4
 # 遵守robots.txt规则

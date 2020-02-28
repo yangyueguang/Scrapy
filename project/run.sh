@@ -13,6 +13,10 @@ function all_run() {
   rm -f /Users/supers/Desktop/result.xlsx
 }
 
+function run_all() {
+    scrapy crawlall
+}
+
 function create() {
     scrapy startproject $scrapy_name
 }
